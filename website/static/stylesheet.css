@@ -1,0 +1,35 @@
+table, th {
+    border: 1px solid grey;
+    padding: 8px;
+    width: 100%;
+  }
+
+  td {
+    vertical-align: top;
+    word-wrap: normal;
+    border: 1px solid grey;
+    padding: 10px;
+  }
+
+  .btn {
+    width: 100%;
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+    color: aliceblue;
+    background-color: green;
+    padding: 12px 23px;
+    transition: 0.5 ease-in-out;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid green ;
+  }
+
+  .btn:hover{
+    background:transparent;
+    color: #000;
+  }
+
+  
