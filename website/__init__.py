@@ -33,7 +33,7 @@ def create_app():
 
     #redirect if login required : login page
     login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'views.welcomescreen'
     login_manager.init_app(app)
 
     #user load that relates to this id 

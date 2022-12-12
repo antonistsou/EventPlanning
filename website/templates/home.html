@@ -1,92 +1,61 @@
 {% extends "base.html" %}
 {% block content %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="static/stylesheet.css" />
 <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
 <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>
 <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-   
-
-<table>
-    <tr"> <h1>Πτυχιακή εργασία : Select events you want to go!</h1>
-      <td >
-    <div class="card">
-      <div class="card-image"> 
-        <figure class="image is-4by3">
-          <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-        </figure>
-      </div>
-      <div class="card-content">
-        <div class="media">
-          <div class="media-left">
-           
-          </div>
-          <div class="media-content">
-            <p class="title is-4" id="name">John Smith</p>
-            <p class="subtitle is-6">@johnsmith</p>
-          </div>
-        </div>
     
-        <div class="content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-          <a href="#">#css</a> <a href="#">#responsive</a>
-          <br>
-          <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-        </div>
-      </div>
-      <button class="btn btn-outline-success my-2 my-sm-0"  id="0" >Select</button>
-    </div>
-      </td>
-     
-  </tr>
-  <hr>
-  
+
+<h1>Πτυχιακή εργασία : Select events you want to go!</h1>
+
+<table  > 
+      {% for event in eventList %}
+<!--       
+      {% if  loop.index%3-1==0 or loop.index==0 %}
+      <tr>
+      {% endif %} -->
+        <tr>
+        <td >
+          <div class="content" display="flex">
+          {{loop.index}} .
+                  <strong>{{event.name}}</strong>             
+                  <figure class="image is-4by3">
+                    <img src="{{event.image}}" alt="Placeholder image" width="360px" height="200px" aling = 'media-left'><br>
+                  </figure>
+                  {{event.description}}<br>
+                  {{event.location}}<hr>
+                  {% for date in event.date %}
+                  {%if loop.index == 1 %}{{date.day}} </br>  
+                  {%if date.time != "" %}
+                  • Ωρα: {{date.time}}
+                  {%endif%}
+                  {%else%}
+                    {%if loop.index != 1 %} - Ημερομινία: {%endif%}
+                    {{date.day}}</br>
+                    {%if date.time != "" %}
+                    • Ωρα: {{date.time}}
+                  {%endif%}
+                  {%endif%}
+                
+                  {% endfor %}
+                <br>
+                  For more :<a href="{{event.link}}"> {{event.link}} </a>
+                </div>
+                &nbsp;
+                &nbsp;
+                &nbsp;
+
+                <button type="button" class="btn" id="{{event.id}}" >Select</button>
+        </td>
+        </tr>
+      {% endfor %}
+   
 </table>
-
-<script>
-    $(document).ready(function(){
-        
-        var array = new Array();
-      
-            $(".btn-outline-success").on('click',function(){
-              const btnID = document.getElementById(this.id);
-
-                if(btnID.innerText!='Submit'){
-                  var flag =false;
-
-                  var currentRow = $(this).closest("tr");
-                
-                  btnID.style.backgroundColor = 'green';  
-                  btnID.textContent = 'Selected!';
-                  var text= currentRow.find("td:eq("+this.id+")").text();
-                  
-                  txt= text.trim();
-                  if(!array.includes(txt))
-                  {
-                    array.push(txt);
-                    flag = true;
-                  }
-                
-                  if(btnID.innerText=='Selected!'&& !flag){
-                      btnID.style.backgroundColor = 'white';  
-                      btnID.textContent = 'Select';
-                      for( var i = 0; i < array.length; i++){ 
-        
-                          if ( array[i] == txt) { 
-
-                              array.splice(i, 1); 
-                          }
-                      }
-                  }
-                  console.log(array);             
-                }
-                // else{
-                //   sessionStorage.setItem("Array", JSON.stringify(array));
-                //   window.location.href='result.html';
-                // }
-              })
-        })
-  
-</script>
-
+<script src="static/index.js"></script>
 {% endblock%}
+<footer style="position: relative ; bottom: 0px ; width: 100% ; height: 50px; background: #343A40; text-align: center; "> <a href="dai19187@uom.edu.g"> dai19187@uom.edu.gr </a> <br>
+  UNIVERSITY OF MACEDONIA 
+</footer>

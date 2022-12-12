@@ -11,14 +11,17 @@ class User(db.Model , UserMixin):
     password = db.Column(db.String(150))
 
 class Event:
-    def __init__(self, id, name, image, description, location , day , time ):
+    def __init__(self, id,link, name, image, description, location ,date ):
         self.id=id
+        self.link = link
         self.name = name
         self.image = image
         self.description = description
         self.location = location
-        self.day = day 
-        self.time = time
+        self.date =date
 
-    
+class date:
+    def __init__(self , day , time):
+        self.day = day
+        self.time = time
 
