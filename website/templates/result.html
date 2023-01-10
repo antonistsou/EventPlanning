@@ -1,7 +1,39 @@
-{% extends "base.html" %}
-{% block content %}
-<form  >
- 
-</form>
+<!DOCTYPE html>
+<html>
+    <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        var sessionString = sessionStorage.getItem('array');
+        $.ajax({
+            url:'/result',
+            type:'POST',
+            data:sessionString,
+            contentType:"application/json"
+        })
+    </script>
+    <style>
+        img.background {
+        position: absolute;
+        left: 600px;
+        top: 0px;
+        z-index: -1;
+        width: fit-content;
+        opacity: 0.65;
+        height: 100%;
+        -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
+        filter: blur(5px);
+        }
+        
+        </style>
+</head>
+<body style="background-color: rgb(199, 172, 152); text-align: center;">
+    <img class = "background" src="static/img/thes.jpg" alt="Aleq">
+    <h2>The optimal program for you is : </h2>
+    <h3 >
+    {% for s in selected %}<br>
+    •{{s.name}}
+    {% endfor %}
 
-{% endblock%}
+</body>
+</html>
+

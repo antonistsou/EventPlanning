@@ -1,9 +1,20 @@
 from bs4 import BeautifulSoup
+from . import db
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+
 
 def get_Thess_Guide_events():
+    from .models import Event,Date
+    import requests
+    
+    try:
+        db.session.query(Event).delete()
+        db.session.query(Date).delete()
+        db.session.commit()
+    except:
+        db.session.rollback()
 
-    print("----------------------------------DATA SCRAPTED-----------------------------------------")
-    from .models import Event , date 
 
     #get page source html code
     htmlsourceCode = getThessalonikiGuideSourceCode()
@@ -18,13 +29,12 @@ def get_Thess_Guide_events():
         urls.append(a.find('a')['href'])
 
     #get source code per url
-    counter = 0 
-    eventsList = list()
-
-    import requests
-
+    
+    id = 0 
+    count =0
     for url in urls:
-        counter = counter + 1
+        id = id + 1
+        
         page_soup = BeautifulSoup(requests.get(url).text , 'html.parser')
 
         #get all event attributes (name, image, description, location, date)
@@ -45,29 +55,34 @@ def get_Thess_Guide_events():
         location = page_soup.find('div',{'class': 'jo-one-line'})
         location = location.text
 
-        #dates
-        dates =list()
-        
-        days = list()
-        times = list()
+        #putting Events into database
+        ev = Event.query.filter_by(link= url).first()
+        if not ev:
+            new_Event = Event(id=id, link = url, name = name , image = img ,description = description ,location = location)
+            db.session.add(new_Event)
+            db.session.commit()
 
-        day = page_soup.find_all('div',{'class': 'jo-weight-600'})
-        for d in day:
-            days.append(d.text)
-            times.append("")
-        
-        count = 0
-        time = page_soup.find_all('div',{'class': 'jo-gray'})
-        for t in time:
-            times.insert(count, t.text)
-            count +=1        
-
-        for i in range(len(days)):
-            dates.append(date(days[i] ,  times[i]))
-
-        eventsList.append(Event(counter, url,name,img,description,location ,dates))  
-
-    return eventsList
+        div_date=page_soup.find_all('div' , {'class' : 'jo-btn jo-btn-5 text-bg-13 jcol-row'})
+        for div in div_date:
+            count = count +1
+            # divs.append(div.find('div', {'class': 'jo-weight-600'}).text)
+            # divs.append(div.find('div', {'class': 'jo-gray'}).text)
+            
+            d=div.find('div', {'class': 'jo-weight-600'}).text
+            t=div.find('div', {'class': 'jo-gray'}).text
+            
+            ev = Date.query.filter_by(date_id= count).first()
+            if not ev:
+                new_Date = Date(date_id=count ,day=d, time=t ,event_id  = id )
+                db.session.add(new_Date)
+                db.session.commit()
+   
+    db.session.close()
+    print("----------------------------------Connection Closed!! -----------------------------------------")
+    print("----------------------------------DATA SCRAPTED-----------------------------------------")
+  
+# def putintohtml(id,link,name,image,description , location ,day[] , time[]):
+#     return id
 
 #get html source code of thessalonikiguide.gr/events/theatro/ 
 def getThessalonikiGuideSourceCode():
