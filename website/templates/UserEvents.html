@@ -16,8 +16,12 @@
       filter: blur(7px);
       }
       </style>
-<body style="text-align: center;">
-    <img class = "background" src="static/img/thess.jpg" alt="Aleq">
-    <p><h2>Hello  {{user.firstName}} ! This is your program you should follow in order to see the most Events : </h2></p> 
-</body>
+    <body style="text-align: center;">
+        <img class = "background" src="static/img/thess.jpg" alt="Aleq">
+            <p><h2>Hello  {{user.firstName}} ! This is your program you should follow in order to see the most Events : </h2></p> 
+
+        {%for r in results%}
+         <h6>{{r}}</h6>
+        {%endfor%}
+    </body>
 {% endblock%}

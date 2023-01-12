@@ -65,8 +65,6 @@ def get_Thess_Guide_events():
         div_date=page_soup.find_all('div' , {'class' : 'jo-btn jo-btn-5 text-bg-13 jcol-row'})
         for div in div_date:
             count = count +1
-            # divs.append(div.find('div', {'class': 'jo-weight-600'}).text)
-            # divs.append(div.find('div', {'class': 'jo-gray'}).text)
             
             d=div.find('div', {'class': 'jo-weight-600'}).text
             t=div.find('div', {'class': 'jo-gray'}).text
@@ -80,11 +78,9 @@ def get_Thess_Guide_events():
     db.session.close()
     print("----------------------------------Connection Closed!! -----------------------------------------")
     print("----------------------------------DATA SCRAPTED-----------------------------------------")
-  
-# def putintohtml(id,link,name,image,description , location ,day[] , time[]):
-#     return id
 
 #get html source code of thessalonikiguide.gr/events/theatro/ 
+#Curl source code
 def getThessalonikiGuideSourceCode():
     import requests
 

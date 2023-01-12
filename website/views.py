@@ -1,7 +1,7 @@
 from flask import Blueprint , render_template ,request , flash ,redirect, url_for
 from flask_login import  login_required , current_user
 import  website.WebScraper
-from .models import Event,Date
+from .models import Event,Date,Result
 
 views = Blueprint('views' , __name__)
 
@@ -16,7 +16,6 @@ def home():
     if not current_user.is_authenticated:
         return  redirect(url_for('views.welcome'))
     #data scraper used
-    # website.WebScraper.get_Thess_Guide_events()
     #get all the events from db
     eventList=Event.query.all() 
     DateList = Date.query.all()
@@ -24,5 +23,12 @@ def home():
 
 @views.route('UserEvents' , methods = ['GET'])
 def UserEvents():
-    return render_template("UserEvents.html" , user = current_user)
+    results = list()
 
+    result = Result.query.all()
+
+    for r in result:
+        if r.user_id == current_user.id:
+            results.append(r.result)
+
+    return  render_template("UserEvents.html" , user = current_user , results = results)
