@@ -39,9 +39,9 @@ def result():
 
             r = Result.query.filter_by(id =count_id).first()
 
-            result_text = str(eventList[s-1].id) + "•"+eventList[s-1].name +",  location: "+ eventList[s-1].location
+            result_text =  "•"+eventList[s-1].name +",  location: "+ eventList[s-1].location
                 
-            final_selection.append(str(eventList[s-1].id) + "•"+eventList[s-1].name +",  location: "+ eventList[s-1].location)
+            final_selection.append( "•"+eventList[s-1].name +",  location: "+ eventList[s-1].location)
             for date in DateList:
                 if date.event_id == eventList[s-1].id:
                     exact_date = date.day + " " + date.time
@@ -52,7 +52,7 @@ def result():
             if not r:
                     new_selection = Result(id = count_id, result =result_text, user_id=current_user.id)
                     db.session.add(new_selection)
-                    db.session.commit()
+            db.session.commit()
 
         return  render_template('/result.html', user=  current_user, selected = final_selection)
     

@@ -1,6 +1,5 @@
-from flask import Blueprint , render_template ,request , flash ,redirect, url_for
-from flask_login import  login_required , current_user
-import  website.WebScraper
+from flask import Blueprint , render_template  ,redirect, url_for
+from flask_login import current_user
 from .models import Event,Date,Result
 
 views = Blueprint('views' , __name__)

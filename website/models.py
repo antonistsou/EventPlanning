@@ -19,7 +19,7 @@ class Event(db.Model):
     dates = db.relationship('Date')
  
 class Date(db.Model):
-    date_id = db.Column(db.Integer , primary_key =True, unique = True)
+    date_id = db.Column(db.Integer , primary_key =True)
     day = db.Column(db.String(32))
     time = db.Column(db.String(32))
     event_id = db.Column(db.Integer , db.ForeignKey('event.id'))

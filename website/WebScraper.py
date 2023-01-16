@@ -1,3 +1,4 @@
+from flask import redirect , url_for
 from bs4 import BeautifulSoup
 from . import db
 from flask_sqlalchemy import SQLAlchemy
@@ -5,6 +6,7 @@ from sqlalchemy import create_engine
 
 
 def get_Thess_Guide_events():
+
     from .models import Event,Date
     import requests
     
@@ -31,7 +33,7 @@ def get_Thess_Guide_events():
     #get source code per url
     
     id = 0 
-    count =0
+    count = 0
     for url in urls:
         id = id + 1
         
@@ -59,8 +61,14 @@ def get_Thess_Guide_events():
         ev = Event.query.filter_by(link= url).first()
         if not ev:
             new_Event = Event(id=id, link = url, name = name , image = img ,description = description ,location = location)
-            db.session.add(new_Event)
-            db.session.commit()
+            try:
+                db.session.add(new_Event)
+            except:
+                db.session.rollback()
+                print("Raised Exeption 1!!")
+                raise
+            else:
+                db.session.commit()
 
         div_date=page_soup.find_all('div' , {'class' : 'jo-btn jo-btn-5 text-bg-13 jcol-row'})
         for div in div_date:
@@ -69,16 +77,18 @@ def get_Thess_Guide_events():
             d=div.find('div', {'class': 'jo-weight-600'}).text
             t=div.find('div', {'class': 'jo-gray'}).text
             
-            ev = Date.query.filter_by(date_id= count).first()
-            if not ev:
+            exist = Date.query.filter_by(date_id= count).first()
+            if not exist:
                 new_Date = Date(date_id=count ,day=d, time=t ,event_id  = id )
-                db.session.add(new_Date)
-                db.session.commit()
-   
-    db.session.close()
-    print("----------------------------------Connection Closed!! -----------------------------------------")
+                try:
+                    db.session.add(new_Date)
+                except:
+                    db.session.rollback()
+                    print("Raised Exeption 2!!")
+                    raise
+                else:
+                    db.session.commit()
     print("----------------------------------DATA SCRAPTED-----------------------------------------")
-
 #get html source code of thessalonikiguide.gr/events/theatro/ 
 #Curl source code
 def getThessalonikiGuideSourceCode():
