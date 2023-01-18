@@ -41,7 +41,7 @@ def create_app():
     #     import website.WebScraper
     #     website.WebScraper.get_Thess_Guide_events()
     scheduler = APScheduler()
-    scheduler.add_job(id ='Scheduled task', func = DataUpdate, trigger = 'interval', hours = 24)
+    scheduler.add_job(id ='Scheduled task', func = DataUpdate, trigger = 'interval', hours  = 24)
     scheduler.start()
 
     #redirect if login required : login page

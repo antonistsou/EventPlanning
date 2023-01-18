@@ -73,12 +73,12 @@ def get_Thess_Guide_events():
         div_date=page_soup.find_all('div' , {'class' : 'jo-btn jo-btn-5 text-bg-13 jcol-row'})
         for div in div_date:
             count = count +1
-            
             d=div.find('div', {'class': 'jo-weight-600'}).text
             t=div.find('div', {'class': 'jo-gray'}).text
             
             exist = Date.query.filter_by(date_id= count).first()
             if not exist:
+                
                 new_Date = Date(date_id=count ,day=d, time=t ,event_id  = id )
                 try:
                     db.session.add(new_Date)
@@ -86,9 +86,9 @@ def get_Thess_Guide_events():
                     db.session.rollback()
                     print("Raised Exeption 2!!")
                     raise
-                else:
-                    db.session.commit()
+    db.session.commit()
     print("----------------------------------DATA SCRAPTED-----------------------------------------")
+
 #get html source code of thessalonikiguide.gr/events/theatro/ 
 #Curl source code
 def getThessalonikiGuideSourceCode():
