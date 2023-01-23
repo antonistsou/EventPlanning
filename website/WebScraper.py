@@ -3,13 +3,21 @@ from bs4 import BeautifulSoup
 from . import db
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
-
+from string import digits
+from datetime import datetime
 
 def get_Thess_Guide_events():
 
     from .models import Event,Date
     import requests
     
+    # get exact date 
+
+    currentDate =datetime.today().strftime("%d/%m/%Y")
+    
+    currentDate = datetime.strptime(currentDate,"%d/%m/%Y")
+    year = datetime.now().year
+   
     try:
         db.session.query(Event).delete()
         db.session.query(Date).delete()
@@ -76,16 +84,32 @@ def get_Thess_Guide_events():
             d=div.find('div', {'class': 'jo-weight-600'}).text
             t=div.find('div', {'class': 'jo-gray'}).text
             
-            exist = Date.query.filter_by(date_id= count).first()
-            if not exist:
-                
-                new_Date = Date(date_id=count ,day=d, time=t ,event_id  = id )
-                try:
-                    db.session.add(new_Date)
-                except:
-                    db.session.rollback()
-                    print("Raised Exeption 2!!")
-                    raise
+            remove_digits = str.maketrans('', '', digits)
+            d1 =d.replace('/','')
+            dayname= d1.translate(remove_digits)
+
+            import re
+
+            pattern=r'[ΔεΤρΤεΠεΠαΣαΚυ ]'
+            exactdate = re.sub(pattern,'',d)
+
+            exactdate +='/'+str(year)
+           
+            exactdate = datetime.strptime(exactdate,"%d/%m/%Y")
+
+            delta  = exactdate - currentDate
+           
+            if delta.days>= 0 and delta.days < 250:
+                exist = Date.query.filter_by(date_id= count).first()
+                if not exist:
+                    
+                    new_Date = Date(date_id=count ,dayname=dayname,day=exactdate, time=t ,event_id  = id )
+                    try:
+                        db.session.add(new_Date)
+                    except:
+                        db.session.rollback()
+                        print("Raised Exeption 2!!")
+                        raise
     db.session.commit()
     print("----------------------------------DATA SCRAPTED-----------------------------------------")
 

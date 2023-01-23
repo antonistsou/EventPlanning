@@ -20,7 +20,8 @@ class Event(db.Model):
  
 class Date(db.Model):
     date_id = db.Column(db.Integer , primary_key =True)
-    day = db.Column(db.String(32))
+    dayname= db.Column(db.String(2))
+    day = db.Column(db.Date)
     time = db.Column(db.String(32))
     event_id = db.Column(db.Integer , db.ForeignKey('event.id'))
     

@@ -26,7 +26,7 @@
                   Παραστάσεις:
                   {% for date in DateList %}
                   {%if date.event_id == event.id %}
-                      <div> • {{date.day}} {{date.time}}</div>
+                      <div> • {{date.dayname}}{{date.day}} @ {{date.time}}</div>
                   {%endif%}
                   {% endfor %}
                 <br>
