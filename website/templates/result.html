@@ -36,6 +36,14 @@
 </head>
 
 <body style="background-color: rgb(199, 172, 152); text-align: center;">
+    <script>
+        window.onload = function() {
+        if(!window.location.hash) {
+            window.location = window.location + '#loaded';
+            window.location.reload();
+        }
+    } 
+    </script>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
@@ -59,3 +67,4 @@
 </body>
 
 </html>
+

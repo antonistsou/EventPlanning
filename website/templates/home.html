@@ -1,21 +1,11 @@
 {% extends "base.html" %}
-{% block content %}
+{% block content %}    
 
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" type="text/css" href="static/stylesheet.css" />
-<script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>
-<script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    
+<h1 style="text-align: center;">Πτυχιακή εργασία : Select events you want to go!</h1>
 
-<h1>Πτυχιακή εργασία : Select events you want to go!</h1>
-
-<table  > 
+<table> 
       {% for event in eventList %}
-        <tr>
-        <td >
-          <div class="content" display="flex">
+        <tr> 
           {{loop.index}} .
                   <strong>{{event.name}}</strong>             
                   <figure class="image is-4by3">
@@ -32,18 +22,11 @@
                 <br>
                   For more :<a href="{{event.link}}"> {{event.link}} </a>
                 </div>
-                &nbsp;
-                &nbsp;
-                &nbsp;
 
                 <button type="button" class="btn" id="{{event.id}}" >Select</button>
-        </td>
         </tr>
       {% endfor %}
    
 </table>
 <script src="static/index.js"></script>
 {% endblock%}
-<footer style="position: relative ; bottom: 0px ; width: 100% ; height: 50px; background: #343A40; text-align: center; "> <a href="dai19187@uom.edu.g"> dai19187@uom.edu.gr </a> <br>
-  UNIVERSITY OF MACEDONIA 
-</footer>

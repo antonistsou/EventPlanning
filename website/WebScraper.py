@@ -68,7 +68,7 @@ def get_Thess_Guide_events():
         #putting Events into database
         ev = Event.query.filter_by(link= url).first()
         if not ev:
-            new_Event = Event(id=id, link = url, name = name , image = img ,description = description ,location = location)
+            new_Event = Event(link = url, name = name , image = img ,description = description ,location = location)
             try:
                 db.session.add(new_Event)
             except:
@@ -79,6 +79,7 @@ def get_Thess_Guide_events():
                 db.session.commit()
 
         div_date=page_soup.find_all('div' , {'class' : 'jo-btn jo-btn-5 text-bg-13 jcol-row'})
+    
         for div in div_date:
             count = count +1
             d=div.find('div', {'class': 'jo-weight-600'}).text
@@ -91,19 +92,19 @@ def get_Thess_Guide_events():
             import re
 
             pattern=r'[ΔεΤρΤεΠεΠαΣαΚυ ]'
+            
             exactdate = re.sub(pattern,'',d)
 
             exactdate +='/'+str(year)
-           
+        
             exactdate = datetime.strptime(exactdate,"%d/%m/%Y")
 
             delta  = exactdate - currentDate
-           
-            if delta.days>= 0 and delta.days < 250:
+            if delta.days> 0 and delta.days < 250:
                 exist = Date.query.filter_by(date_id= count).first()
                 if not exist:
+                    new_Date = Date(dayname=dayname,day=exactdate, time=t ,event_id  = id )
                     
-                    new_Date = Date(date_id=count ,dayname=dayname,day=exactdate, time=t ,event_id  = id )
                     try:
                         db.session.add(new_Date)
                     except:

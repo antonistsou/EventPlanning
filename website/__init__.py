@@ -37,9 +37,9 @@ def create_app():
             print('_________________ DB created! ___________________')
         else:
             print("----------------------------------Connection Establisted-----------------------------------------")   
-    with app.app_context():
-        import website.WebScraper
-        website.WebScraper.get_Thess_Guide_events()
+    # with app.app_context():
+    #     import website.WebScraper
+    #     website.WebScraper.get_Thess_Guide_events()
     # scheduler = APScheduler()
     # scheduler.add_job(id ='Scheduled task', func = DataUpdate, trigger = 'interval', hours  = 24)
     # scheduler.start()
