@@ -37,6 +37,7 @@ def create_app():
             print('_________________ DB created! ___________________')
         else:
             print("----------------------------------Connection Establisted-----------------------------------------")   
+
     # with app.app_context():
     #     import website.WebScraper
     #     website.WebScraper.get_Thess_Guide_events()

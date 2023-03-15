@@ -4,21 +4,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="static/index.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
 
     <title>{% block title %}Event planning {% endblock %}</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script>
-        var sessionString = sessionStorage.getItem('array');
-        $.ajax({
-            url: '/result',
-            type: 'POST',
-            data: sessionString,
-            contentType: "application/json"
-        })
-    </script>
     <style>
         img.background {
             position: absolute;
@@ -36,14 +28,14 @@
 </head>
 
 <body style="background-color: rgb(199, 172, 152); text-align: center;">
-    <script>
+    <!-- <script>
         window.onload = function() {
         if(!window.location.hash) {
             window.location = window.location + '#loaded';
             window.location.reload();
         }
     } 
-    </script>
+    </script> -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">

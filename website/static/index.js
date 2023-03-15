@@ -1,33 +1,83 @@
-
-
 $(document).ready(function(){   
         var array = new Array();
-        $(".btn").on('click',function(){
+        var priorArray = new Array();
+
+        var buttons = document.getElementsByTagName("button");
+        var map = new Map();
+      
+        const buttonPressed = e => {
+            btnID = e.target;  // Get ID of Clicked Element
             var flag = true
-            var btnID = document.getElementById(this.id);
-            if(!array.includes(this.id))
+         
+        
+            if(!array.includes(btnID.id))
             {
-            btnID.textContent = 'Selected!';
-            btnID.style.background = 'light green';
-            array.push(this.id);
-            flag = false;
+                btnID.textContent = 'Selected!';
+                btnID.style.background = 'light green';
+                array.push(btnID.id);
+                flag = false;
             }
             
             if(flag){  
                 btnID.textContent = 'Select';
                 btnID.style.background = 'green';
-            for( var i = 0; i < array.length; i++){ 
-
-                if ( array[i] == this.id) { 
-                    array.splice(i, 1); 
-                }
+                for( var i = 0; i < array.length; i++){ 
+                    if ( array[i] == btnID.id) { 
+                        array.splice(i, 1); 
+                        slice= i;
+                    }
                 }
             }
-            console.log(array);})
-        $(".btn-primary").on('click',function(){
-            sessionStorage.setItem('array' , JSON.stringify(array));
-            window.location.href="/result";
+            var radiochecked = document.querySelector('input[type="radio"][name="priority' + btnID.id + '"]:checked');
+            var intid =radiochecked.id;
+            
+            intid= intid - btnID.id*btnID.id;
+            
+        
+            if(!flag){
+                priorArray.push(intid);
+                for(var i = 0; i< array.length ; i++){
+                  map.set(array[i], priorArray[i]);
+                }
+            }            
+            else{
+                priorArray.splice(slice, 1);     
+                map.delete(btnID.id)
+            }
+
+            // console.log("Select array : "+array);
+            // console.log("Priority array : "+priorArray);
+        
+         
+            console.log(map);  
+        }
+
+        function sendMapToServer() {
+            const data = JSON.stringify({ 'map': [...map] });
+            fetch('/result', {
+              method: 'POST',
+              body: data,
+              headers: {
+                'Content-Type': 'application/json'
+              }
             })
+            .then(response => {
+              console.log(response);
+              window.location.href = '/result';
+            })
+            .catch(error => {
+              console.log('Error sending data');
+            });
+          }
           
-         })
- 
+          $(".btn-primary").on('click', function() {
+            sendMapToServer();
+          });
+
+        for (let button of buttons) {
+            if(button.className!='btn-primary')
+                button.addEventListener("click", buttonPressed);
+        }
+       
+})
+       

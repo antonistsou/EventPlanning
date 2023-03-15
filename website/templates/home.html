@@ -7,12 +7,14 @@
       {% for event in eventList %}
         <tr> 
           {{loop.index}} .
-                  <strong>{{event.name}}</strong>             
+                  <h5><strong>{{event.name}}</strong></h5>             
                   <figure class="image is-4by3">
                     <img src="{{event.image}}" alt="Placeholder image" width="360px" height="200px" aling = 'media-left'><br>
                   </figure>
-                  {{event.description}}<br>
-                  {{event.location}}<hr>
+                  {{event.description}}<hr>
+                  {{event.info}}
+                  <hr>
+                  <strong>{{event.location}}</strong><hr>
                   Παραστάσεις:
                   {% for date in DateList %}
                   {%if date.event_id == event.id %}
@@ -21,9 +23,17 @@
                   {% endfor %}
                 <br>
                   For more :<a href="{{event.link}}"> {{event.link}} </a>
+                <br>
+                Number of priority . Higher is better.
+                <div>
+                  
+                  1 <input type="radio"  name="priority{{event.id}}" id ="{{loop.index*event.id+1}}" checked/>
+                  2 <input type="radio"  name="priority{{event.id}}" id ="{{loop.index*event.id+2}}" />
+                  3 <input type="radio"  name="priority{{event.id}}" id ="{{loop.index*event.id+3}}"/>
+  
                 </div>
-
-                <button type="button" class="btn" id="{{event.id}}" >Select</button>
+                <div> <button type="button" name="button" value="button" class="btn" id="{{event.id}}" >Select</button></div>
+               
         </tr>
       {% endfor %}
    

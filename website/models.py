@@ -15,6 +15,7 @@ class Event(db.Model):
     name = db.Column(db.String(1000))
     image = db.Column(db.String(1000))
     description = db.Column(db.String(1000))
+    info = db.Column(db.String(1000))
     location = db.Column(db.String(1000))
     dates = db.relationship('Date')
  
