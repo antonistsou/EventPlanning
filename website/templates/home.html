@@ -14,7 +14,9 @@
                   {{event.description}}<hr>
                   {{event.info}}
                   <hr>
-                  <strong>{{event.location}}</strong><hr>
+                  <strong>
+                    <img src="static/img/location.png" width="24px" height ="24px">
+                    {{event.location}}</strong><hr>
                   Παραστάσεις:
                   {% for date in DateList %}
                   {%if date.event_id == event.id %}

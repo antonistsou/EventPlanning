@@ -2,7 +2,7 @@ from flask import redirect , url_for
 from bs4 import BeautifulSoup
 from . import db
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from string import digits
 from datetime import datetime
 
@@ -80,7 +80,7 @@ def get_Thess_Guide_events():
                 db.session.add(new_Event)
             except:
                 db.session.rollback()
-                print("Raised Exeption 1!!")
+                print("Raised Exeption IN EVENTS!!")
                 raise
             else:
                 db.session.commit()
@@ -93,6 +93,13 @@ def get_Thess_Guide_events():
             d=div.find('div', {'class': 'fw-600'}).text
             t=div.find('div', {'class': 'jo-gray'}).text
             
+            if d =='':
+                try:
+                    Event.query.filter_by(id=id).delete()
+                    db.session.commit()
+                except:
+                    db.session.rollback()
+
             remove_digits = str.maketrans('', '', digits)
             d1 =d.replace('/','')
             dayname= d1.translate(remove_digits)
@@ -117,7 +124,7 @@ def get_Thess_Guide_events():
                         db.session.add(new_Date)
                     except:
                         db.session.rollback()
-                        print("Raised Exeption 2!!")
+                        print("Raised Exeption In DATES!!")
                         raise
     db.session.commit()
     print("----------------------------------DATA SCRAPTED-----------------------------------------")
@@ -126,7 +133,6 @@ def get_Thess_Guide_events():
 #Curl source code
 def getThessalonikiGuideSourceCode():
     import requests
-
 
     headers = {
         'authority': 'www.thessalonikiguide.gr',

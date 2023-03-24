@@ -10,7 +10,7 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
 
     <title>{% block title %}Event planning {% endblock %}</title>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    
     <style>
         img.background {
             position: absolute;
@@ -34,8 +34,9 @@
             window.location = window.location + '#loaded';
             window.location.reload();
         }
-    } 
-    </script> -->
+    }  -->
+    <!-- </script> -->
+    
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
@@ -47,13 +48,13 @@
     </nav>
     <div>
         <img class="background" src="static/img/thes.jpg" alt="Aleq">
-        {% if selected: %}
+      
         <h2>The optimal program for you is : </h2>
         <h3>
-            {% for s in selected %}<br>
-            {{s}}<br>
-            {% endfor %}
-            {%endif%}
+        
+        {% for r in result %}
+        >>{{r}}<br>
+        {% endfor %}
         </h3>
     </div>
 </body>

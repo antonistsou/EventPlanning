@@ -25,8 +25,8 @@ class Date(db.Model):
     day = db.Column(db.Date)
     time = db.Column(db.String(32))
     event_id = db.Column(db.Integer , db.ForeignKey('event.id'))
- 
+       
 class Result(db.Model):
     id = db.Column(db.Integer , primary_key = True )
-    result = db.Column(db.String(100000))
+    result = db.Column(db.String(1000))
     user_id =db.Column(db.Integer , db.ForeignKey('user.id'))
