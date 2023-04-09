@@ -2,25 +2,25 @@ $(document).ready(function(){
         var array = new Array();
         var priorArray = new Array();
 
-        var buttons = document.getElementsByTagName("button");
+        var buttons = document.getElementsByClassName("btn btn-outline-primary")
         var map = new Map();
       
         const buttonPressed = e => {
+          
             btnID = e.target;  // Get ID of Clicked Element
             var flag = true
-         
-        
+  
             if(!array.includes(btnID.id))
             {
                 btnID.textContent = 'Selected!';
-                btnID.style.background = 'light green';
+                // btnID.style.background = 'light green';
                 array.push(btnID.id);
                 flag = false;
             }
             
             if(flag){  
                 btnID.textContent = 'Select';
-                btnID.style.background = 'green';
+                // btnID.style.background = 'green';
                 for( var i = 0; i < array.length; i++){ 
                     if ( array[i] == btnID.id) { 
                         array.splice(i, 1); 
@@ -30,7 +30,7 @@ $(document).ready(function(){
             }
             var radiochecked = document.querySelector('input[type="radio"][name="priority' + btnID.id + '"]:checked');
             var intid =radiochecked.id;
-            
+           
             intid= intid - btnID.id*btnID.id;
             
         
@@ -50,6 +50,7 @@ $(document).ready(function(){
         
          
             console.log(map);  
+          
         }
 
         function sendMapToServer() {
@@ -75,8 +76,9 @@ $(document).ready(function(){
           });
 
         for (let button of buttons) {
-            if(button.className!='btn-primary')
-                button.addEventListener("click", buttonPressed);
+            
+              button.addEventListener("click", buttonPressed);
+           
         }
        
 })

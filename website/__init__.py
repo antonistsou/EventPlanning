@@ -27,7 +27,7 @@ def create_app():
     app.register_blueprint(res, url_prefix='/')
 
 
-    from .models import User 
+    from .models import Event,User 
  
     #db creation
     with app.app_context():
@@ -38,12 +38,16 @@ def create_app():
         else:
             print("----------------------------------Connection Establisted-----------------------------------------")   
 
-    # with app.app_context():
-    #     import website.WebScraper
-    #     website.WebScraper.get_Thess_Guide_events()
-    # scheduler = APScheduler()
-    # scheduler.add_job(id ='Scheduled task', func = DataUpdate, trigger = 'interval', hours  = 24)
-    # scheduler.start()
+        if  db.session.query(Event).count() == 0:
+            import website.WebScraper
+            website.WebScraper.get_Thess_Guide_events()
+        if  db.session.query(Event).count() != 0:
+            #Automated method in order to update database.db every 24 hours
+            print("Database will update automatically in 24 hours . . .")
+            scheduler = APScheduler()
+            scheduler.add_job(id ='Scheduled task', func = update_database, trigger = 'interval', hours  = 24)
+            scheduler.start()
+            pass
 
     #redirect if login required : login page
     login_manager = LoginManager()
@@ -58,7 +62,8 @@ def create_app():
     return app
     
 
-def DataUpdate():
+def update_database():
     with app.app_context():
         import website.WebScraper
         website.WebScraper.get_Thess_Guide_events()
+ 

@@ -4,60 +4,50 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="static/front/stylesheet.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="static/index.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
-
-    <title>{% block title %}Event planning {% endblock %}</title>
-    
-    <style>
-        img.background {
-            position: absolute;
-            left: 600px;
-            top: 0px;
-            z-index: -1;
-            width: fit-content;
-            opacity: 0.65;
-            height: 100%;
-            -webkit-filter: blur(5px);
-            /* Safari 6.0 - 9.0 */
-            filter: blur(5px);
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+   
+  
+    <title>{% block title %}Result • Event planning {% endblock %}</title>
 </head>
 
-<body style="background-color: rgb(199, 172, 152); text-align: center;">
-    <!-- <script>
-        window.onload = function() {
-        if(!window.location.hash) {
-            window.location = window.location + '#loaded';
-            window.location.reload();
-        }
-    }  -->
-    <!-- </script> -->
-    
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="collapse navbar-collapse" id="navbar">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" id="home" href="/">Home</a>
-                <a class="nav-item nav-link" id="firstName" href="/UserEvents"
-                    style="color: burlywood;">{{user.firstName}}</a>
-            </div>
+<body style="background-color:aliceblue; text-align: center;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 " style="border-bottom: 1px solid #2600ff">
+        <div class="container">
+          <a href="/" class="navbar-brand">Cultural <span class="text-primary">Event</span> Planner</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navmenu">
+            <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                    <a href="/UserEvents" class="nav-link" style="color: #2600ff;">{{user.firstName}}</a>
+                </li>
+            </ul>
+          </div>
         </div>
     </nav>
+    
     <div>
-        <img class="background" src="static/img/thes.jpg" alt="Aleq">
-      
-        <h2>The optimal program for you is : </h2>
-        <h3>
-        
-        {% for r in result %}
-        >>{{r}}<br>
-        {% endfor %}
-        </h3>
+        <img class="background" src="static/img/thess.jpg" alt="Aleq">
+        {% if result  %}
+        <h2>Το βέλτιστο πρόγραμμα σύμφωνα με τις προτιμήσεις σου είναι:</h2> 
+        <h4> 
+          {% for r in result %}
+          {{r}}<br>
+          {% endfor %}
+          </h4>
+        {%else%}
+         Ωχ! Παρακαλώ επιλέξτε τις παραστάσεις για να βγεί κάποιο αποτέλεσμα.
+        {%endif%}
+       
     </div>
 </body>
-
+<footer class="p-4 bg-dark text-white text-center"  style="border-top: 1px solid #2600ff" >
+    <div class="container"> 
+      <button type="button" class="btn btn-link">dai19187@uom.edu.gr</button>
+  </div> 
+  </footer>
 </html>
 

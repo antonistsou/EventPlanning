@@ -14,7 +14,7 @@ def welcome():
 def home():
     if not current_user.is_authenticated:
         return  redirect(url_for('views.welcome'))
-    #data scraper used
+    
     #get all the events from db
     eventList=Event.query.all() 
     DateList = Date.query.all()

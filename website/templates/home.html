@@ -1,44 +1,68 @@
 {% extends "base.html" %}
 {% block content %}    
-
-<h1 style="text-align: center;">Πτυχιακή εργασία : Select events you want to go!</h1>
-
-<table> 
-      {% for event in eventList %}
-        <tr> 
-          {{loop.index}} .
-                  <h5><strong>{{event.name}}</strong></h5>             
-                  <figure class="image is-4by3">
-                    <img src="{{event.image}}" alt="Placeholder image" width="360px" height="200px" aling = 'media-left'><br>
-                  </figure>
-                  {{event.description}}<hr>
-                  {{event.info}}
-                  <hr>
-                  <strong>
-                    <img src="static/img/location.png" width="24px" height ="24px">
-                    {{event.location}}</strong><hr>
-                  Παραστάσεις:
-                  {% for date in DateList %}
-                  {%if date.event_id == event.id %}
-                      <div> • {{date.dayname}}{{date.day}} @ {{date.time}}</div>
-                  {%endif%}
-                  {% endfor %}
-                <br>
-                  For more :<a href="{{event.link}}"> {{event.link}} </a>
-                <br>
-                Number of priority . Higher is better.
-                <div>
-                  
-                  1 <input type="radio"  name="priority{{event.id}}" id ="{{loop.index*event.id+1}}" checked/>
-                  2 <input type="radio"  name="priority{{event.id}}" id ="{{loop.index*event.id+2}}" />
-                  3 <input type="radio"  name="priority{{event.id}}" id ="{{loop.index*event.id+3}}"/>
   
-                </div>
-                <div> <button type="button" name="button" value="button" class="btn" id="{{event.id}}" >Select</button></div>
-               
-        </tr>
-      {% endfor %}
-   
-</table>
-<script src="static/index.js"></script>
+<section class="bg-dark text-light p-5 text-center" style="border-bottom: 1px solid #2600ff">
+
+
+<h5 style="text-align: center;padding-top: 75px;" >
+  <p> Η παρόν ιστοσελίδα αποτελεί ενα<span class="text-primary"> σύστημα επίλυσης προβλήματος Χρονοπρογραμματισμού</span>  θεατρικών παραστάσεων. Έχει αναπτυχθεί σε test-server και αποτελεί <span class="text-primary">πτυχιακή εργασία</span> 
+    του φοιτητή Αντώνη Τσουτσούκα του τμήματος της<span class="text-primary"> εφαρμοσμένης πληροφορικής</span> ,σε συνεργασία με τον Καθηγητή Κ.Ηλία Σακελλαρίου. Με την επιλογή των παρακάτω παραστάσεων το σύστημα σας βρίσκει το 
+    <span class="text-primary"> βέλτιστο πρόγραμμα </span>ώστε
+     να παρεβρεθείτε σε όσες περισσότερες παραστάσεις γίνεται με περιορισμό μία παράσταση την ημέρα. Με την επιλογή των κουμπίων 1,2,3 επιλέγεται το πόσο πολύ θέλετε
+      να παρακολουθήσετε καθοριζόμενη απο τον μεγαλύτερο αριθμό αντοιστοιχα. 
+  </p>
+  </h5 > 
+</section>
+
+<section id="events" class="p-4">
+  <div class="container">
+    <h2 class="text-center">Available Events</h2>
+    {% for event in eventList %}
+      {% if loop.index0 % 3 == 0 %}
+        <div class="row p-3">
+      {% endif %}
+      <div class="col mb-3  card-col ">
+        <div class="card shadow h-100">
+          <div class="card-body text-center d-flex flex-column ">
+            <h6 class="card-title mb-3 strong"><strong>{{ event.name }}</strong></h6>
+            <img src="{{ event.image }}" class="card-img-topimg-fluid rounded mx-auto d-block shadow  img-fit" alt="Placeholder image" width="180px" height="100px"><br>
+           
+            <div class="col"> 
+            <h6><p class="card-text">{{ event.description }} <br>{{ event.info }}</p></h6>
+            <p><strong>{{ event.location }}</strong></p></h5></div>
+            <p>Παραστάσεις:</p>
+            <ul class="list-group">
+              {% for date in DateList %}
+                {% if date.event_id == event.id %}
+                <li class="list-group-item">{{ date.dayname }}{{ date.day }} @ {{ date.time }}</li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+            <p >For more: <a href="{{ event.link }}">{{ event.link }}</a></p>
+            <p>
+              Number of priority. Higher is better.
+              <div>
+                1 <input type="radio"  name="priority{{event.id}}" id ="{{event.id*event.id+1}}" checked/>
+                2 <input type="radio"  name="priority{{event.id}}" id ="{{event.id*event.id+2}}" />
+                3 <input type="radio"  name="priority{{event.id}}" id ="{{event.id*event.id+3}}"/>
+              </div>
+            </p>
+          
+              <button type="button" class="btn btn-outline-primary mt-auto" id="{{event.id}}">Select</button>
+            
+          </div>
+        </div>
+      </div>
+      {% if loop.index0 % 3 == 2 or loop.last %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+<style>
+  .card-col {
+    max-width: 430px;
+  }
+  </style>
+<script src="static/front/index.js"></script>
 {% endblock%}

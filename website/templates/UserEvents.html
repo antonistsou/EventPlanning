@@ -1,27 +1,26 @@
 {% extends "base.html" %}
 
-    {% block content %}
-    <head>
-        <Title>{{user.firstName}}</Title>
-    </head> <style>
-      img.background {
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      z-index: -1;
-      width: 100%;
-      opacity: 0.65;
-      height: 100%;
-      -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
-      filter: blur(7px);
-      }
-      </style>
-    <body style="text-align: center;">
-        <img class = "background" src="static/img/thess.jpg" alt="Aleq">
-            <p><h2>Hello  {{user.firstName}} ! This is your program you should follow in order to see the most Events : </h2></p> 
+{% block content %}
+<body>
+    <div class="contrainer">
+        <br>
+        <br>
+        <div class="container py-5 text-center" style="min-height: 88vh">
+            <img class="background" src="static/img/thess.jpg" alt="Aleq">
+            <p>
+            {% if results %}
+            <h2>Hello <span class="text-primary">{{user.firstName}}</span> !<br>
+                Το βέλτιστο πρόγραμμα σύμφωνα με τις προτιμήσεις σου είναι:
+            </h2>
+            </p>
+                {%for r in results%}
+                <h5 style="text-align: left;">{{r}}</h5>
+                {%endfor%}
+            {%else%}
+                Δεν έχει δημιουργηθεί πρόγραμμα ακόμα. 
+            {%endif%}
+        </div>
+    </div>
+</body>
 
-        {%for r in results%}
-         <h6>{{r}}</h6>
-        {%endfor%}
-    </body>
 {% endblock%}

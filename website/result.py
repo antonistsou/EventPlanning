@@ -28,6 +28,7 @@ def result():
             db.session.commit()
         except:
             db.session.rollback()
+
         handle_request()
 
         for i in range(len(keys)) :
@@ -39,13 +40,14 @@ def result():
         sorted_weight = {k: v for k, v in items}
         eventList= Event.query.all() 
         DateList = Date.query.all()
-
+    
         # the array with the selected events 
         selected_array=list()
 
-        # print(sorted_weight.keys())
         for num in sorted_weight.keys():
-           selected_array.append(eventList[num-1])
+            for i in range(len(eventList)):
+                if num == eventList[i].id:
+                    selected_array.append(eventList[i])
            
         #the array with selected dates in every event
         Date_array=list()
@@ -53,9 +55,12 @@ def result():
             for date in DateList:
                 if events.id == date.event_id:
                     Date_array.append(date)
-
-        # The constraints part         
-        # Create the solver
+        
+        values_prior=list()
+        for p in sorted_weight.values():
+            values_prior.append(p)
+        
+        #Create the solver
         solver = pywraplp.Solver('EventScheduler', pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
         # Create variables for each event and date combination
@@ -73,25 +78,20 @@ def result():
                     if date_key not in date_vars:
                         date_vars[date_key] = solver.BoolVar('')
             
-        # Add the constraint that each event can only be scheduled once
+        #Add the constraint that each event can only be scheduled once
         for event_key in event_vars.keys():
             solver.Add(solver.Sum([event_vars[event_key][date_key] for date_key in event_vars[event_key].keys()]) <= 1)
             
-        # constraint that each date is different in the result
+        #Constraint that demands date be different in result
         for date_key in date_vars.keys():
             solver.Add(solver.Sum([event_vars[event_key][date_key] for event_key in event_vars.keys() if date_key in event_vars[event_key]]) <= 1)
              
-        values_prior=list()
-        for p in sorted_weight.values():
-            values_prior.append(p)
-                
         # Create the objective function
         objective = solver.Objective()
         c=0
         for event_key in event_vars.keys():
             
             priority = values_prior[c] # get the priority weight for this event
-            print(values_prior[c])
             c+=1
             for date_key in event_vars[event_key].keys():
                 objective.SetCoefficient(event_vars[event_key][date_key], priority) # set the coefficient for this event and date combination
@@ -116,7 +116,7 @@ def result():
                     
                         result.append(result_string)
                         
-                        r = Result.query.filter_by(result = result_string).first()
+                        r = Result.query.filter_by(id = id).first()
                         if not r:
                             new_result = Result(result = result_string , user_id =id )
                             try:
@@ -129,8 +129,6 @@ def result():
             print("Solver returned non-optimal solution")
         db.session.commit()
 
-        # print(result)
-        
         return  render_template('/result.html', user=  current_user, result= result)
     else:
         final_result = list()

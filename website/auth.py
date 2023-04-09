@@ -22,7 +22,7 @@ def login():
             else: 
                 flash('Incorrect email or password , please try again.' , category='notification')
         else: 
-            flash('Account does not exist.')  
+            flash('Account does not exist.',category='notification')  
     return render_template("login.html" , user = current_user)
 
 @auth.route('/logout')

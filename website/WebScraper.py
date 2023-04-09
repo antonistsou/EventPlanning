@@ -11,8 +11,10 @@ def get_Thess_Guide_events():
     from .models import Event,Date
     import requests
     
-    # get exact date 
+    #events that will be deleted if needed
+    event_id_to_be_deleted= list()
 
+    #get current date 
     currentDate =datetime.today().strftime("%d/%m/%Y")
     
     currentDate = datetime.strptime(currentDate,"%d/%m/%Y")
@@ -24,7 +26,6 @@ def get_Thess_Guide_events():
         db.session.commit()
     except:
         db.session.rollback()
-
 
     #get page source html code
     htmlsourceCode = getThessalonikiGuideSourceCode()
@@ -40,8 +41,7 @@ def get_Thess_Guide_events():
         p+=1
         urls.append(a.find('a')['href'])
 
-    #get source code per url
-    
+    #get source html code per url
     id = 0 
     count = 0
     for url in urls:
@@ -49,7 +49,7 @@ def get_Thess_Guide_events():
         
         page_soup = BeautifulSoup(requests.get(url).text , 'html.parser')
 
-        #get all event attributes (name, image, description, location, date)
+        #get all event attributes (name, image, description, info,location, date)
         #name
         name = page_soup.find('h1',{'class':"fw-800 ithDF-f text-25 lh-120"})
         name = name.text
@@ -86,48 +86,77 @@ def get_Thess_Guide_events():
                 db.session.commit()
 
         #Event Dates
-        div_date=page_soup.find_all('div' , {'class' : 'col-4 col-sm-4 col-md-2 p-3'})
-                                                    
+        div_date=page_soup.find_all('div' , {'class' : 'text-13 border-gray border-rad-5 p-5 text-center'})
+        
         for div in div_date:
             count = count +1
-            d=div.find('div', {'class': 'fw-600'}).text
-            t=div.find('div', {'class': 'jo-gray'}).text
-            
-            if d =='':
-                try:
-                    Event.query.filter_by(id=id).delete()
-                    db.session.commit()
-                except:
-                    db.session.rollback()
+            setDates(div , id , currentDate , year,count)  
 
-            remove_digits = str.maketrans('', '', digits)
-            d1 =d.replace('/','')
-            dayname= d1.translate(remove_digits)
-
-            import re
-
-            pattern=r'[ΔεΤρΤεΠεΠαΣαΚυ ]'
-            
-            exactdate = re.sub(pattern,'',d)
-
-            exactdate +='/'+str(year)
+        div_date_II =  page_soup.find_all('div' , {'class' : 'col-3 p-5 text-center'})
         
-            exactdate = datetime.strptime(exactdate,"%d/%m/%Y")
+        for div in div_date_II:
+            count = count +1
+            setDates(div, id , currentDate , year,count)  
 
-            delta  = exactdate - currentDate
-            if delta.days> 0 and delta.days < 250:
-                exist = Date.query.filter_by(date_id= count).first()
-                if not exist:
-                    new_Date = Date(dayname=dayname,day=exactdate, time=t ,event_id  = id )
-                    
-                    try:
-                        db.session.add(new_Date)
-                    except:
-                        db.session.rollback()
-                        print("Raised Exeption In DATES!!")
-                        raise
+        if not Date.query.filter_by(event_id=id).all():
+            event_id_to_be_deleted.append(id)
+        
     db.session.commit()
     print("----------------------------------DATA SCRAPTED-----------------------------------------")
+
+    #delete Events without Date 
+    for i in event_id_to_be_deleted:
+        try:    
+            Event.query.filter_by(id=i).delete()
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+
+#Same function on different attributes of Div_date class name 
+def setDates(div , id , currentDate , year,count):
+    from .models import Event,Date
+
+    d=div.find('div', {'class': 'fw-600'}).text
+    t=div.find('div', {'class': 'jo-gray'})
+
+    if t is not None:
+        t=t.text
+    else: 
+        t =''
+
+    if d is None:
+        try:
+            Event.query.filter_by(id=id).delete()
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+    remove_digits = str.maketrans('', '', digits)
+    d1 =d.replace('/','')
+    dayname= d1.translate(remove_digits)
+
+    import re
+
+    pattern=r'[ΔεΤρΤεΠεΠαΣαΚυ ]'
+    
+    exactdate = re.sub(pattern,'',d)
+
+    exactdate +='/'+str(year)
+
+    exactdate = datetime.strptime(exactdate,"%d/%m/%Y")
+
+    delta  = exactdate - currentDate
+    if delta.days> 0 and delta.days < 250:
+        exist = Date.query.filter_by(date_id= count).first()
+        if not exist:
+            new_Date = Date(dayname=dayname,day=exactdate, time=t ,event_id  = id )
+            try:
+                db.session.add(new_Date)
+            except:
+                db.session.rollback()
+                print("Raised Exeption In DATES!!")
+                raise
 
 #get html source code of thessalonikiguide.gr/events/theatro/ 
 #Curl source code
@@ -165,8 +194,6 @@ def getThessalonikiGuideSourceCode():
         'If-None-Match': '^\\^kQIB0mzxcKM3Mm7qOVo7+dvSugs=^\\^',
         'If-Modified-Since': 'Thu, 09 Feb 2023 11:26:58 GMT',
     }
-
-
 
     response = requests.get('https://www.thessalonikiguide.gr/events/theatro/', headers=headers)
 

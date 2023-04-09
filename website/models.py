@@ -9,6 +9,7 @@ class User(db.Model , UserMixin):
     password = db.Column(db.String(150))
     result = db.relationship('Result')
 
+#Event Table
 class Event(db.Model):
     id = db.Column(db.Integer , primary_key =True)
     link = db.Column(db.String(150) , unique = True)
@@ -18,14 +19,16 @@ class Event(db.Model):
     info = db.Column(db.String(1000))
     location = db.Column(db.String(1000))
     dates = db.relationship('Date')
- 
+
+#Date Table
 class Date(db.Model):
     date_id = db.Column(db.Integer , primary_key =True)
     dayname= db.Column(db.String(2))
     day = db.Column(db.Date)
     time = db.Column(db.String(32))
     event_id = db.Column(db.Integer , db.ForeignKey('event.id'))
-       
+
+#Result       
 class Result(db.Model):
     id = db.Column(db.Integer , primary_key = True )
     result = db.Column(db.String(1000))
